@@ -111,8 +111,7 @@ class GeodesicSphere:
     
     def plot(self) -> None:
         ax = axes(projection='3d')
-        for face in self.f:
-            ax.add_collection3d(Poly3DCollection(verts=[face], facecolors='white', edgecolor='black'))
+        ax.add_collection3d(Poly3DCollection(verts=list(self.f), facecolors='white', edgecolor='black'))
         ax.axis('off')
         ax.grid(visible=None)
         ax.set(xlim=(-1, 1), ylim=(-1, 1), zlim=(-1, 1))
