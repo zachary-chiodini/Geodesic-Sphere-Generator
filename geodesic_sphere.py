@@ -8,22 +8,22 @@ class GeodesicSphere:
     golden_ratio = (1 + sqrt(5)) / 2
     # These are the vertices of a regular icosahedron.
     verts = {
-	( golden_ratio / 2,  0.0             ,  0.5              ),
-	( golden_ratio / 2,  0.0             , -0.5              ),
-	(-golden_ratio / 2,  0.0             ,  0.5              ),
-	(-golden_ratio / 2,  0.0             , -0.5              ),
-	( 0.5             ,  golden_ratio / 2,  0.0              ),
-	(-0.5             ,  golden_ratio / 2,  0.0              ),
-	( 0.5             , -golden_ratio / 2,  0.0              ),
-	(-0.5             , -golden_ratio / 2,  0.0              ),
-	( 0.0             ,  0.5             ,  golden_ratio / 2 ),
-	( 0.0             , -0.5             ,  golden_ratio / 2 ),
-	( 0.0             ,  0.5             , -golden_ratio / 2 ),
-	( 0.0             , -0.5             , -golden_ratio / 2 )
+        ( golden_ratio / 2,  0.0             ,  0.5              ),
+        ( golden_ratio / 2,  0.0             , -0.5              ),
+        (-golden_ratio / 2,  0.0             ,  0.5              ),
+        (-golden_ratio / 2,  0.0             , -0.5              ),
+        ( 0.5             ,  golden_ratio / 2,  0.0              ),
+        (-0.5             ,  golden_ratio / 2,  0.0              ),
+        ( 0.5             , -golden_ratio / 2,  0.0              ),
+        (-0.5             , -golden_ratio / 2,  0.0              ),
+        ( 0.0             ,  0.5             ,  golden_ratio / 2 ),
+        ( 0.0             , -0.5             ,  golden_ratio / 2 ),
+        ( 0.0             ,  0.5             , -golden_ratio / 2 ),
+        ( 0.0             , -0.5             , -golden_ratio / 2 )
     }
     # These are the faces of a regular icosahedron.
     faces = {
-	((-golden_ratio / 2,  0.0             , -0.5              ),
+        ((-golden_ratio / 2,  0.0             , -0.5              ),
          (-golden_ratio / 2,  0.0             ,  0.5              ),
          (-0.5             , -golden_ratio / 2,  0.0              )),
         ((-golden_ratio / 2,  0.0             , -0.5              ),
