@@ -72,19 +72,13 @@ class GeodesicSphere:
     def __init__(self, frequency: int = 0):
         self.w = int(frequency)
         self.f = self.faces.copy()
+        self._tesselate()
+        self._project()
 
-    def plot(self) -> None:
-        ax = axes(projection='3d')
-        for face in self.f:
-            ax.add_collection3d(Poly3DCollection(verts=[face], facecolors='white', edgecolor='black' ))
-        ax.axis('off')
-        ax.grid(visible=None)
-        ax.set(xlim=(-1, 1), ylim=(-1, 1), zlim=(-1, 1))
-        ax.set_aspect('equal', 'box')
-        show()
-        return None
-
-    def project(self) -> None:
+    def _project(self) -> None:
+        """
+        This function projects each vertex of each face onto the surface of a sphere of radius 1.
+        """
         for face in self.f.copy():
             projected_face = []
             for x, y, z in face:
@@ -94,7 +88,10 @@ class GeodesicSphere:
             self.f.add(tuple(projected_face))
         return None
 
-    def tesselate(self) -> None:
+    def _tesselate(self) -> None:
+        """
+        This function takes each face of the icosahedron and creates 4 new faces within it.
+        """
         for _ in range(self.w):
             for face in self.f.copy():
                 v1, v2, v3 = face
@@ -111,10 +108,19 @@ class GeodesicSphere:
                 self.f.remove(face)
                 self.f.update([face1, face2, face3, face4])
         return None
+    
+    def plot(self) -> None:
+        ax = axes(projection='3d')
+        for face in self.f:
+            ax.add_collection3d(Poly3DCollection(verts=[face], facecolors='white', edgecolor='black'))
+        ax.axis('off')
+        ax.grid(visible=None)
+        ax.set(xlim=(-1, 1), ylim=(-1, 1), zlim=(-1, 1))
+        ax.set_aspect('equal', 'box')
+        show()
+        return None
 
 
 if __name__ == '__main__':
     geodesic_sphere = GeodesicSphere(1)
-    geodesic_sphere.tesselate()
-    geodesic_sphere.project()
     geodesic_sphere.plot()
