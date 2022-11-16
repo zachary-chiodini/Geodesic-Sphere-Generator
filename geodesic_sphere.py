@@ -108,7 +108,7 @@ class GeodesicSphere:
                 self.f.remove(face)
                 self.f.update([face1, face2, face3, face4])
         return None
-    
+
     def plot(self) -> None:
         ax = axes(projection='3d')
         ax.add_collection3d(Poly3DCollection(verts=list(self.f), facecolors='white', edgecolor='black'))
