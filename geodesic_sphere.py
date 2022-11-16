@@ -121,5 +121,4 @@ class GeodesicSphere:
 
 
 if __name__ == '__main__':
-    geodesic_sphere = GeodesicSphere(1)
-    geodesic_sphere.plot()
+    GeodesicSphere(1).plot()
