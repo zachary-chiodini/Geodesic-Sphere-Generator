@@ -1,7 +1,6 @@
 from math import sqrt
 from matplotlib.pyplot import axes, show
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
-from typing import Union
 
 
 class GeodesicSphere:
