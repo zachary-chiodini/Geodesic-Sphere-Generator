@@ -86,8 +86,9 @@ class GeodesicSphere:
          ( golden_ratio / 2,  0.0             ,  0.5              ))
     }
 
-    def __init__(self, frequency: int = 0, hollow: bool = False):
-        self.w = frequency
+    def __init__(self, frequency: int = 0, hollow: bool = False, thinness_factor: int = 0):
+        self.w = int(frequency)
+        self.t = int(thinness_factor)
         self.p = self.verts.copy()
         self.f = self.faces.copy()
         self._tesselate()
@@ -98,12 +99,12 @@ class GeodesicSphere:
     def _hollow(self) -> None:
         for face in self.f.copy():
             v1, v2, v3 = face
-            center_point = ((v1[0] + v2[0] + v3[0]) / 3, (v1[1] + v2[1] + v3[1]) / 3, (v1[2] + v2[2] + v3[2]) / 3)
+            cp = ((v1[0] + v2[0] + v3[0]) / 3, (v1[1] + v2[1] + v3[1]) / 3, (v1[2] + v2[2] + v3[2]) / 3)
             shrunken_face = [0.0, 0.0, 0.0]
             for i, v in enumerate(face):
-                x = (v[0] + center_point[0]) / 2
-                y = (v[1] + center_point[1]) / 2
-                z = (v[2] + center_point[2]) / 2
+                x, y, z = (v[0] + cp[0]) / 2, (v[1] + cp[1]) / 2, (v[2] + cp[2]) / 2
+                for _ in range(self.t):
+                    x, y, z = (v[0] + x) / 2, (v[1] + y) / 2, (v[2] + z) / 2
                 shrunken_face[i] = (x, y, z)
             self.f.remove(face)
             face1 = (v1, v2, shrunken_face[1], shrunken_face[0])
@@ -162,4 +163,4 @@ class GeodesicSphere:
 
 
 if __name__ == '__main__':
-    GeodesicSphere(frequency=1, hollow=False).plot()
+    GeodesicSphere(frequency=2, hollow=True, thinness_factor=1).plot()
