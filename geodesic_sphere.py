@@ -108,10 +108,10 @@ class GeodesicSphere:
         This function projects each vertex of each face onto the surface of a sphere of radius 1.
         """
         for face in self.f.copy():
-            projected_face = []
-            for x, y, z in face:
-                m = sqrt(x**2 + y**2 + z**2)
-                projected_face.append((x / m, y / m, z / m))
+            projected_face = [(), (), ()]
+            for i, v in enumerate(face):
+                m = sqrt(v[0]**2 + v[1]**2 + v[2]**2)
+                projected_face[i] = (v[0] / m, v[1] / m, v[2] / m)
             self.f.remove(face)
             self.f.add(tuple(projected_face))
         return None
