@@ -24,26 +24,26 @@ class GeodesicSphere:
     # These are the faces of a regular icosahedron.
     faces = {
         ((-golden_ratio / 2,  0.0             , -0.5              ),
-         (-golden_ratio / 2,  0.0             ,  0.5              ),
-         (-0.5             , -golden_ratio / 2,  0.0              )),
+         (-0.5             , -golden_ratio / 2,  0.0              ),
+         (-golden_ratio / 2,  0.0             ,  0.5              )),
         ((-golden_ratio / 2,  0.0             , -0.5              ),
          (-golden_ratio / 2,  0.0             ,  0.5              ),
          (-0.5             ,  golden_ratio / 2,  0.0              )),
         ((-golden_ratio / 2,  0.0             , -0.5              ),
-         (-0.5             , -golden_ratio / 2,  0.0              ),
-         ( 0.0             , -0.5             , -golden_ratio / 2 )),
+         ( 0.0             , -0.5             , -golden_ratio / 2 ),
+         (-0.5             , -golden_ratio / 2,  0.0              )),
         ((-golden_ratio / 2,  0.0             , -0.5              ),
          (-0.5             ,  golden_ratio / 2,  0.0              ),
          ( 0.0             ,  0.5             , -golden_ratio / 2 )),
         ((-golden_ratio / 2,  0.0             , -0.5              ),
-         ( 0.0             , -0.5             , -golden_ratio / 2 ),
-         ( 0.0             ,  0.5             , -golden_ratio / 2 )),
+         ( 0.0             ,  0.5             , -golden_ratio / 2 ),
+         ( 0.0             , -0.5             , -golden_ratio / 2 )),
         ((-golden_ratio / 2,  0.0             ,  0.5              ),
          (-0.5             , -golden_ratio / 2,  0.0              ),
          ( 0.0             , -0.5             ,  golden_ratio / 2 )),
         ((-golden_ratio / 2,  0.0             ,  0.5              ),
-         (-0.5             ,  golden_ratio / 2,  0.0              ),
-         ( 0.0             ,  0.5             ,  golden_ratio / 2 )),
+         ( 0.0             ,  0.5             ,  golden_ratio / 2 ),
+         (-0.5             ,  golden_ratio / 2,  0.0              )),
         ((-golden_ratio / 2,  0.0             ,  0.5              ),
          ( 0.0             , -0.5             ,  golden_ratio / 2 ),
          ( 0.0             ,  0.5             ,  golden_ratio / 2 )),
@@ -51,23 +51,23 @@ class GeodesicSphere:
          ( 0.0             , -0.5             , -golden_ratio / 2 ),
          ( 0.5             , -golden_ratio / 2,  0.0              )),
         ((-0.5             , -golden_ratio / 2,  0.0              ),
-         ( 0.0             , -0.5             ,  golden_ratio / 2 ),
-         ( 0.5             , -golden_ratio / 2,  0.0              )),
-        ((-0.5             ,  golden_ratio / 2,  0.0              ),
-         ( 0.0             ,  0.5             , -golden_ratio / 2 ),
-         ( 0.5             ,  golden_ratio / 2,  0.0              )),
-        ((-0.5             ,  golden_ratio / 2,  0.0              ),
-         ( 0.0             ,  0.5             ,  golden_ratio / 2 ),
-         ( 0.5             ,  golden_ratio / 2,  0.0              )),
-        (( 0.0             , -0.5             , -golden_ratio / 2 ),
-         ( 0.0             ,  0.5             , -golden_ratio / 2 ),
-         ( golden_ratio / 2,  0.0             , -0.5              )),
-        (( 0.0             , -0.5             , -golden_ratio / 2 ),
          ( 0.5             , -golden_ratio / 2,  0.0              ),
-         ( golden_ratio / 2,  0.0             , -0.5              )),
-        (( 0.0             , -0.5             ,  golden_ratio / 2 ),
+         ( 0.0             , -0.5             ,  golden_ratio / 2 )),
+        ((-0.5             ,  golden_ratio / 2,  0.0              ),
+         ( 0.5             ,  golden_ratio / 2,  0.0              ),
+         ( 0.0             ,  0.5             , -golden_ratio / 2 )),
+        ((-0.5             ,  golden_ratio / 2,  0.0              ),
          ( 0.0             ,  0.5             ,  golden_ratio / 2 ),
-         ( golden_ratio / 2,  0.0             ,  0.5              )),
+         ( 0.5             ,  golden_ratio / 2,  0.0              )),
+        (( 0.0             , -0.5             , -golden_ratio / 2 ),
+         ( 0.0             ,  0.5             , -golden_ratio / 2 ),
+         ( golden_ratio / 2,  0.0             , -0.5              )),
+        (( 0.0             , -0.5             , -golden_ratio / 2 ),
+         ( golden_ratio / 2,  0.0             , -0.5              ),
+         ( 0.5             , -golden_ratio / 2,  0.0              )),
+        (( 0.0             , -0.5             ,  golden_ratio / 2 ),
+         ( golden_ratio / 2,  0.0             ,  0.5              ),
+         ( 0.0             ,  0.5             ,  golden_ratio / 2 )),
         (( 0.0             , -0.5             ,  golden_ratio / 2 ),
          ( 0.5             , -golden_ratio / 2,  0.0              ),
          ( golden_ratio / 2,  0.0             ,  0.5              )),
@@ -75,14 +75,14 @@ class GeodesicSphere:
          ( 0.5             ,  golden_ratio / 2,  0.0              ),
          ( golden_ratio / 2,  0.0             , -0.5              )),
         (( 0.0             ,  0.5             ,  golden_ratio / 2 ),
-         ( 0.5             ,  golden_ratio / 2,  0.0              ),
-         ( golden_ratio / 2,  0.0             ,  0.5              )),
+         ( golden_ratio / 2,  0.0             ,  0.5              ),
+         ( 0.5             ,  golden_ratio / 2,  0.0              )),
         (( 0.5             , -golden_ratio / 2,  0.0              ),
          ( golden_ratio / 2,  0.0             , -0.5              ),
          ( golden_ratio / 2,  0.0             ,  0.5              )),
         (( 0.5             ,  golden_ratio / 2,  0.0              ),
-         ( golden_ratio / 2,  0.0             , -0.5              ),
-         ( golden_ratio / 2,  0.0             ,  0.5              ))
+         ( golden_ratio / 2,  0.0             ,  0.5              ),
+         ( golden_ratio / 2,  0.0             , -0.5              ))
     }
 
     def __init__(self, frequency: int = 0, hollow: bool = False, thinness_factor: int = 0):
@@ -98,18 +98,22 @@ class GeodesicSphere:
     def _hollow(self) -> None:
         for face in self.f.copy():
             v1, v2, v3 = face
-            cp = ((v1[0] + v2[0] + v3[0]) / 3, (v1[1] + v2[1] + v3[1]) / 3, (v1[2] + v2[2] + v3[2]) / 3)
+            center_x, center_y, center_z = (v1[0] + v2[0] + v3[0]) / 3, (v1[1] + v2[1] + v3[1]) / 3, (v1[2] + v2[2] + v3[2]) / 3
             shrunken_face = [0.0, 0.0, 0.0]
             for i, v in enumerate(face):
-                x, y, z = (v[0] + cp[0]) / 2, (v[1] + cp[1]) / 2, (v[2] + cp[2]) / 2
+                x, y, z = (v[0] + center_x) / 2, (v[1] + center_y) / 2, (v[2] + center_z) / 2
                 for _ in range(self.t):
                     x, y, z = (v[0] + x) / 2, (v[1] + y) / 2, (v[2] + z) / 2
                 shrunken_face[i] = (x, y, z)
             self.f.remove(face)
-            face1 = (v1, v2, shrunken_face[1], shrunken_face[0])
-            face2 = (v2, v3, shrunken_face[2], shrunken_face[1])
-            face3 = (v3, v1, shrunken_face[0], shrunken_face[2])
-            self.f.update([face1, face2, face3])
+            face1 = (v1, v2, shrunken_face[1])
+            face2 = (v1, shrunken_face[1], shrunken_face[0])
+            face3 = (v2, v3, shrunken_face[2])
+            face4 = (v2, shrunken_face[2], shrunken_face[1])
+            face5 = (v3, v1, shrunken_face[0])
+            face6 = (v3, shrunken_face[0], shrunken_face[2])
+            reversed_faces = [face1[::-1], face2[::-1], face3[::-1], face4[::-1], face5[::-1], face6[::-1]]
+            self.f.update([face1, face2, face3, face4, face5, face6, *reversed_faces])
         return None
 
     def _project(self) -> None:
@@ -144,10 +148,33 @@ class GeodesicSphere:
                 self.p.update([mid_point1, mid_point2, mid_point3])
                 face1 = (v1, mid_point1, mid_point3)
                 face2 = (mid_point1, v2, mid_point2)
-                face3 = (mid_point2, mid_point3, v3)
+                face3 = (mid_point2, v3, mid_point3)
                 face4 = (mid_point1, mid_point2, mid_point3)
                 self.f.remove(face)
                 self.f.update([face1, face2, face3, face4])
+        return None
+
+    def gen_stl_file(self, name: str) -> None:
+        if name.endswith('.stl'):
+            solid_name = name.strip('.stl')
+            file_name = name
+        else:
+            solid_name = name
+            file_name = f"{name}.stl"
+        with open(file_name, 'w') as file:
+            file.write(f"solid {solid_name}\n")
+            for face in self.f:
+                v1, v2, v3 = face
+                center_x, center_y, center_z = (v1[0] + v2[0] + v3[0]) / 3, (v1[1] + v2[1] + v3[1]) / 3, (v1[2] + v2[2] + v3[2]) / 3
+                magnitude = sqrt(center_x**2 + center_y**2 + center_z**2)
+                normal_x, normal_y, normal_z = (center_x / magnitude, center_y / magnitude, center_z / magnitude)
+                file.write(f"facet normal {normal_x} {normal_y} {normal_z}\n")
+                file.write('\touter loop\n')
+                for vertex in face:
+                    file.write(f"\t\tvertex {vertex[0]} {vertex[1]} {vertex[2]}\n")
+                file.write('\tendloop\n')
+                file.write('endfacet\n')
+            file.write(f"endsolid {solid_name}")
         return None
 
     def plot(self) -> None:
@@ -162,4 +189,6 @@ class GeodesicSphere:
 
 
 if __name__ == '__main__':
-    GeodesicSphere(frequency=2, hollow=True, thinness_factor=1).plot()
+    geodesic_sphere = GeodesicSphere(frequency=1, hollow=True, thinness_factor=1)
+    geodesic_sphere.plot()
+    geodesic_sphere.gen_stl_file('geodesic_sphere')
