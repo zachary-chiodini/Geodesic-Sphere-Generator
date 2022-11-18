@@ -78,11 +78,11 @@ class GeodesicSphere:
             hollow_factor (int, optional): _description_. Defaults to 0. Ranges from [0, n].
             thickness_factor (int, optional): _description_. Defaults to 0. Ranges from [0, 100].
         """
-        if (not isinstance(frequency, int)) or (frequency < 0):
+        if not (isinstance(frequency, int) and (frequency >= 0)):
             raise ValueError('Frequency must be a positive integer.')
-        if (not isinstance(hollow_factor, int)) or (hollow_factor < 0):
+        if not (isinstance(hollow_factor, int) and (hollow_factor >= 0)):
             raise ValueError('Hollow factor must be a positive integer.')
-        if (not isinstance(thickness_factor, int)) or (0 <= thickness_factor <= 100):
+        if not (isinstance(thickness_factor, int) and (0 <= thickness_factor <= 100)):
             raise ValueError('Thickness factor must be an integer between 0 and 100 inclusive.')
         self.w = frequency
         self.h = hollow_factor
