@@ -9,7 +9,7 @@ geodesic_sphere.plot()
 geodesic_sphere.gen_stl_file('geodesic_sphere')
 ```
 
-## Or run module
+## Run module
 
 ```
 python -m geodesic_sphere
