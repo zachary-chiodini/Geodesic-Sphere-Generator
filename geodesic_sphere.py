@@ -74,12 +74,12 @@ class GeodesicSphere:
     def __init__(self, frequency: int = 0, hollow_factor: int = 0, thickness_factor: Union[float, int] = 0):
         if not (isinstance(frequency, int) and (frequency >= 0)):
             raise ValueError('Frequency must be a positive integer.')
-        if not (isinstance(hollow_factor, int) and (hollow_factor >= 0)):
-            raise ValueError('Hollow factor must be a positive integer.')
+        if not (isinstance(hollow_factor, Union[float, int]) and (0 <= hollow_factor <= 100)):
+            raise ValueError('Hollow factor must be a number between 0 and 100 inclusive.')
         if not (isinstance(thickness_factor, Union[float, int]) and (0 <= thickness_factor <= 100)):
-            raise ValueError('Thickness factor must be an integer between 0 and 100 inclusive.')
+            raise ValueError('Thickness factor must be a number between 0 and 100 inclusive.')
         self.w = frequency
-        self.h = hollow_factor
+        self.h = hollow_factor / 100
         self.t = (100 - thickness_factor) / 100
         self.f = self.faces.copy()
         self._tesselate()
@@ -94,16 +94,24 @@ class GeodesicSphere:
         for face in self.f.copy():
             # First find the center of the triangle.
             v1, v2, v3 = face
-            center_x, center_y, center_z = (v1[0] + v2[0] + v3[0]) / 3, (v1[1] + v2[1] + v3[1]) / 3, (v1[2] + v2[2] + v3[2]) / 3
-            # Shrink the triangle relative to the center point.
-            shrunken_face = [(), (), ()]
-            for i, v in enumerate(face):
-                x, y, z = (v[0] + center_x) / 2, (v[1] + center_y) / 2, (v[2] + center_z) / 2
-                for _ in range(self.h):
-                    x, y, z = (v[0] + x) / 2, (v[1] + y) / 2, (v[2] + z) / 2
-                shrunken_face[i] = (x, y, z)
+            center_point = ((v1[0] + v2[0] + v3[0]) / 3, (v1[1] + v2[1] + v3[1]) / 3, (v1[2] + v2[2] + v3[2]) / 3)
+            # The hollowed area must exist at the center point and extend to all three vertices as a shrunken void triangle.
+            # The range of the shrunken void triangle is from the middle point to each vertex in the outer triangle.
+            # Below are 3 vectors pointing from the center point to each vertex on the face.
+            # These will be used to make three 3D lines, upon which the center point is at 0 and each vertex is at 1.
+            direction1 = ((v1[0] - center_point[0]), (v1[1] - center_point[1]), (v1[2] - center_point[2]))
+            direction2 = ((v2[0] - center_point[0]), (v2[1] - center_point[1]), (v2[2] - center_point[2]))
+            direction3 = ((v3[0] - center_point[0]), (v3[1] - center_point[1]), (v3[2] - center_point[2]))
+            # The hollowness factor h is a float between 0 and 1 inclusive. 
+            # The vertices of the shrunken void triangle are calculated from the equation of a 3D line at point h for each vertex of the larger triangle.
+            # This creates a smaller "shrunken" triangle within the initial larger triangle.
+            shrunken_face = [
+				(center_point[0] + self.h * direction1[0], center_point[1] + self.h * direction1[1], center_point[2] + self.h * direction1[2]),
+				(center_point[0] + self.h * direction2[0], center_point[1] + self.h * direction2[1], center_point[2] + self.h * direction2[2]),
+				(center_point[0] + self.h * direction3[0], center_point[1] + self.h * direction3[1], center_point[2] + self.h * direction3[2])
+			]
             self.f.remove(face)
-            # Create the skeleton of the hollowed object from the vertices of the outer triangle and inner shrunken triangle. The inner shrunken triangle is void. 
+            # Create the skeleton of the hollowed object from the vertices of the outer triangle and inner shrunken void triangle.
             # The space between the outer triangle and inner triangle is filled by inserting two new triangles on each side of the inner triangle.
             # This creates 6 new faces. These new faces are outward facing.
             outer_face1 = (v1, v2, shrunken_face[1])
@@ -205,6 +213,6 @@ class GeodesicSphere:
 
 
 if __name__ == '__main__':
-    geodesic_sphere = GeodesicSphere(frequency=1, hollow_factor=1, thickness_factor=10)
+    geodesic_sphere = GeodesicSphere(frequency=1, hollow_factor=10, thickness_factor=10)
     geodesic_sphere.plot()
     geodesic_sphere.gen_stl_file('geodesic_sphere')
