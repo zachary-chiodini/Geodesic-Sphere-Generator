@@ -1,6 +1,7 @@
 from math import sqrt
 from matplotlib.pyplot import axes, show
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
+from typing import Union
 
 
 class GeodesicSphere:
@@ -70,19 +71,12 @@ class GeodesicSphere:
          ( golden_ratio / 2,  0.0             , -0.5              ))
     }
 
-    def __init__(self, frequency: int = 0, hollow_factor: int = 0, thickness_factor: int = 0):
-        """_summary_
-
-        Args:
-            frequency (int, optional): _description_. Defaults to 0. Ranges from [0, n].
-            hollow_factor (int, optional): _description_. Defaults to 0. Ranges from [0, n].
-            thickness_factor (int, optional): _description_. Defaults to 0. Ranges from [0, 100].
-        """
+    def __init__(self, frequency: int = 0, hollow_factor: int = 0, thickness_factor: Union[float, int] = 0):
         if not (isinstance(frequency, int) and (frequency >= 0)):
             raise ValueError('Frequency must be a positive integer.')
         if not (isinstance(hollow_factor, int) and (hollow_factor >= 0)):
             raise ValueError('Hollow factor must be a positive integer.')
-        if not (isinstance(thickness_factor, int) and (0 <= thickness_factor <= 100)):
+        if not (isinstance(thickness_factor, Union[float, int]) and (0 <= thickness_factor <= 100)):
             raise ValueError('Thickness factor must be an integer between 0 and 100 inclusive.')
         self.w = frequency
         self.h = hollow_factor
@@ -95,30 +89,53 @@ class GeodesicSphere:
 
     def _hollow(self) -> None:
         """
-        This function hollows the geodesic sphere.
+        This function hollows the geodesic sphere, giving it a kind of skeletal structure.
         """
         for face in self.f.copy():
+            # First find the center of the triangle.
             v1, v2, v3 = face
             center_x, center_y, center_z = (v1[0] + v2[0] + v3[0]) / 3, (v1[1] + v2[1] + v3[1]) / 3, (v1[2] + v2[2] + v3[2]) / 3
-            shrunken_face = [0.0, 0.0, 0.0]
+            # Shrink the triangle relative to the center point.
+            shrunken_face = [(), (), ()]
             for i, v in enumerate(face):
                 x, y, z = (v[0] + center_x) / 2, (v[1] + center_y) / 2, (v[2] + center_z) / 2
                 for _ in range(self.h):
                     x, y, z = (v[0] + x) / 2, (v[1] + y) / 2, (v[2] + z) / 2
                 shrunken_face[i] = (x, y, z)
             self.f.remove(face)
-            new_faces = [
-                (v1, v2, shrunken_face[1]),
-                (v1, shrunken_face[1], shrunken_face[0]),
-                (v2, v3, shrunken_face[2]),
-                (v2, shrunken_face[2], shrunken_face[1]),
-                (v3, v1, shrunken_face[0]),
-                (v3, shrunken_face[0], shrunken_face[2])
-            ]
-            for v1, v2, v3 in new_faces:
-                reversed_face = 
-            reversed_faces = [face1[::-1], face2[::-1], face3[::-1], face4[::-1], face5[::-1], face6[::-1]]
-            self.f.update([face1, face2, face3, face4, face5, face6, *reversed_faces])
+            # Create the skeleton of the hollowed object from the vertices of the outer triangle and inner shrunken triangle. The inner shrunken triangle is void. 
+            # The space between the outer triangle and inner triangle is filled by inserting two new triangles on each side of the inner triangle.
+            # This creates 6 new faces. These new faces are outward facing.
+            outer_face1 = (v1, v2, shrunken_face[1])
+            outer_face2 = (v1, shrunken_face[1], shrunken_face[0])
+            outer_face3 = (v2, v3, shrunken_face[2])
+            outer_face4 = (v2, shrunken_face[2], shrunken_face[1])
+            outer_face5 = (v3, v1, shrunken_face[0])
+            outer_face6 = (v3, shrunken_face[0], shrunken_face[2])
+            self.f.update({outer_face1, outer_face2, outer_face3, outer_face4, outer_face5, outer_face6})
+            # Create the inward facing triangles by reversing the order of the vertices in each outward facing triangle.
+            inner_face1 = tuple(tuple(p * self.t for p in v) for v in outer_face1[::-1])
+            inner_face2 = tuple(tuple(p * self.t for p in v) for v in outer_face2[::-1])
+            inner_face3 = tuple(tuple(p * self.t for p in v) for v in outer_face3[::-1])
+            inner_face4 = tuple(tuple(p * self.t for p in v) for v in outer_face4[::-1])
+            inner_face5 = tuple(tuple(p * self.t for p in v) for v in outer_face5[::-1])
+            inner_face6 = tuple(tuple(p * self.t for p in v) for v in outer_face6[::-1])
+            self.f.update({inner_face1, inner_face2, inner_face3, inner_face4, inner_face5, inner_face6})
+            # If the scaling factor t is less than one, the inward facing vertices were scaled down by t, and
+            # the space between the outward and inward facing triangles must now be filled with 6 new triangles (2 for each side).
+            if self.t < 1:
+                v1, v2, v3 = shrunken_face
+                inner_shrunken_face = ((v1[0] * self.t, v1[1] * self.t, v1[2] * self.t),
+                                       (v2[0] * self.t, v2[1] * self.t, v2[2] * self.t),
+                                       (v3[0] * self.t, v3[1] * self.t, v3[2] * self.t))
+                side_face1 = (shrunken_face[0], shrunken_face[1], inner_shrunken_face[0])
+                side_face2 = (shrunken_face[1], inner_shrunken_face[1], inner_shrunken_face[0])
+                side_face3 = (shrunken_face[1], shrunken_face[2], inner_shrunken_face[1])
+                side_face4 = (shrunken_face[2], inner_shrunken_face[2], inner_shrunken_face[1])
+                
+                side_face5 = (shrunken_face[2], shrunken_face[0], inner_shrunken_face[2])
+                side_face6 = (shrunken_face[0], inner_shrunken_face[0], inner_shrunken_face[2])
+                self.f.update({side_face1, side_face2, side_face3, side_face4, side_face5, side_face6})
         return None
 
     def _project(self) -> None:
@@ -137,6 +154,7 @@ class GeodesicSphere:
     def _tesselate(self) -> None:
         """
         This function takes each face of the icosahedron and creates 4 new faces within it.
+        (It turns each triangle into a triforce symbol with the center triangle filled.)
         """
         for _ in range(self.w):
             for face in self.f.copy():
@@ -149,7 +167,7 @@ class GeodesicSphere:
                 face3 = (mid_point2, v3, mid_point3)
                 face4 = (mid_point1, mid_point2, mid_point3)
                 self.f.remove(face)
-                self.f.update([face1, face2, face3, face4])
+                self.f.update({face1, face2, face3, face4})
         return None
 
     def gen_stl_file(self, name: str) -> None:
@@ -187,6 +205,6 @@ class GeodesicSphere:
 
 
 if __name__ == '__main__':
-    geodesic_sphere = GeodesicSphere(frequency=1, hollow_factor=1)
+    geodesic_sphere = GeodesicSphere(frequency=1, hollow_factor=1, thickness_factor=10)
     geodesic_sphere.plot()
     geodesic_sphere.gen_stl_file('geodesic_sphere')
