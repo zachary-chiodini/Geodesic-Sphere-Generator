@@ -70,13 +70,27 @@ class GeodesicSphere:
          ( golden_ratio / 2,  0.0             , -0.5              ))
     }
 
-    def __init__(self, frequency: int = 0, hollow: bool = False, thinness_factor: int = 0):
-        self.w = int(frequency)
-        self.t = int(thinness_factor)
+    def __init__(self, frequency: int = 0, hollow_factor: int = 0, thickness_factor: int = 0):
+        """_summary_
+
+        Args:
+            frequency (int, optional): _description_. Defaults to 0. Ranges from [0, n].
+            hollow_factor (int, optional): _description_. Defaults to 0. Ranges from [0, n].
+            thickness_factor (int, optional): _description_. Defaults to 0. Ranges from [0, 100].
+        """
+        if (not isinstance(frequency, int)) or (frequency < 0):
+            raise ValueError('Frequency must be a positive integer.')
+        if (not isinstance(hollow_factor, int)) or (hollow_factor < 0):
+            raise ValueError('Hollow factor must be a positive integer.')
+        if (not isinstance(thickness_factor, int)) or (0 <= thickness_factor <= 100):
+            raise ValueError('Thickness factor must be an integer between 0 and 100 inclusive.')
+        self.w = frequency
+        self.h = hollow_factor
+        self.t = (100 - thickness_factor) / 100
         self.f = self.faces.copy()
         self._tesselate()
         self._project()
-        if hollow:
+        if hollow_factor:
             self._hollow()
 
     def _hollow(self) -> None:
@@ -89,16 +103,20 @@ class GeodesicSphere:
             shrunken_face = [0.0, 0.0, 0.0]
             for i, v in enumerate(face):
                 x, y, z = (v[0] + center_x) / 2, (v[1] + center_y) / 2, (v[2] + center_z) / 2
-                for _ in range(self.t):
+                for _ in range(self.h):
                     x, y, z = (v[0] + x) / 2, (v[1] + y) / 2, (v[2] + z) / 2
                 shrunken_face[i] = (x, y, z)
             self.f.remove(face)
-            face1 = (v1, v2, shrunken_face[1])
-            face2 = (v1, shrunken_face[1], shrunken_face[0])
-            face3 = (v2, v3, shrunken_face[2])
-            face4 = (v2, shrunken_face[2], shrunken_face[1])
-            face5 = (v3, v1, shrunken_face[0])
-            face6 = (v3, shrunken_face[0], shrunken_face[2])
+            new_faces = [
+                (v1, v2, shrunken_face[1]),
+                (v1, shrunken_face[1], shrunken_face[0]),
+                (v2, v3, shrunken_face[2]),
+                (v2, shrunken_face[2], shrunken_face[1]),
+                (v3, v1, shrunken_face[0]),
+                (v3, shrunken_face[0], shrunken_face[2])
+            ]
+            for v1, v2, v3 in new_faces:
+                reversed_face = 
             reversed_faces = [face1[::-1], face2[::-1], face3[::-1], face4[::-1], face5[::-1], face6[::-1]]
             self.f.update([face1, face2, face3, face4, face5, face6, *reversed_faces])
         return None
@@ -169,6 +187,6 @@ class GeodesicSphere:
 
 
 if __name__ == '__main__':
-    geodesic_sphere = GeodesicSphere(frequency=1, hollow=True, thinness_factor=1)
+    geodesic_sphere = GeodesicSphere(frequency=1, hollow_factor=1)
     geodesic_sphere.plot()
     geodesic_sphere.gen_stl_file('geodesic_sphere')
