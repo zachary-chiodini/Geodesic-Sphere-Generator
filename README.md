@@ -1,5 +1,6 @@
 # Geodesic-Sphere-Generator
 
+##Import module
 ```python
 from geodesic_sphere import GeodesicSphere
 
@@ -8,7 +9,7 @@ geodesic_sphere.plot()
 geodesic_sphere.gen_stl_file('geodesic_sphere')
 ```
 
-# Or
+##Or run module
 
 ```
 python -m geodesic_sphere
