@@ -1,5 +1,5 @@
 from math import sqrt
-from matplotlib.pyplot import axes, show
+from matplotlib.pyplot import axes, savefig, show
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 from typing import Union
 
@@ -206,13 +206,14 @@ class GeodesicSphere:
         ax.add_collection3d(Poly3DCollection(verts=list(self.f), facecolors='white', edgecolor='black'))
         ax.axis('off')
         ax.grid(visible=None)
-        ax.set(xlim=(-1, 1), ylim=(-1, 1), zlim=(-1, 1))
+        ax.set(xlim=(-0.64, 0.64), ylim=(-0.64, 0.64), zlim=(-0.64, 0.64))
         ax.set_aspect('equal', 'box')
+        savefig('geodesic_sphere.png', bbox_inches='tight')
         show()
         return None
 
 
 if __name__ == '__main__':
-    geodesic_sphere = GeodesicSphere(frequency=1, hollow_factor=40, thickness_factor=40)
+    geodesic_sphere = GeodesicSphere(frequency=0, hollow_factor=61.8, thickness_factor=10)
     geodesic_sphere.plot()
     geodesic_sphere.gen_stl_file('geodesic_sphere')
